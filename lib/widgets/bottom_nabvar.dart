@@ -44,14 +44,14 @@ class _ButtomNavbarState extends State<ButtomNavbar> {
           items: <BottomNavyBarItem>[
             BottomNavyBarItem(
               icon: Icon(Icons.local_taxi_rounded),
-              title: Text('Ride', style: Theme.of(context).textTheme.bodyLarge),
+              title: Text('Home', style: Theme.of(context).textTheme.bodyLarge),
               activeColor: secondary,
               inactiveColor: primary,
               textAlign: TextAlign.center,
             ),
             BottomNavyBarItem(
               icon: Icon(Icons.history),
-              title: Text('History', style: Theme.of(context).textTheme.bodyLarge),
+              title: Text('Order', style: Theme.of(context).textTheme.bodyLarge),
               activeColor: secondary,
               inactiveColor: primary,
               textAlign: TextAlign.center,
