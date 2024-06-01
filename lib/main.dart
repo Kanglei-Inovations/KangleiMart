@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:kangleimart/firebase_options.dart';
+import 'package:kangleimart/providers/products_provider.dart';
 import 'package:kangleimart/widgets/bottom_nabvar.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,7 +33,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-
+        ChangeNotifierProvider(
+          create: (ctx) => ProductsProvider(),
+        ),
       ],
       child: GetMaterialApp(
         title: 'PRINTONEX',
