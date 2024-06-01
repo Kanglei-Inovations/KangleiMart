@@ -1,17 +1,20 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
 import 'package:kangleimart/firebase_options.dart';
-import 'package:kangleimart/providers/products_provider.dart';
 import 'package:kangleimart/screens/home_screen.dart';
-import 'package:kangleimart/screens/product_screen.dart';
+import 'package:kangleimart/screens/profile_screen.dart';
 
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'providers/auth_provider.dart';
+import 'providers/cart_provider.dart';
+import 'providers/orders_provider.dart';
+import 'providers/products_provider.dart';
+import 'screens/cart_page.dart';
+import 'screens/orders_screen.dart';
+import 'screens/product_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,37 +23,35 @@ void main() async {
     statusBarColor: Colors.deepPurpleAccent, // Change this to your desired color
   ));
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  runApp(MyApp(prefs: prefs));
+  runApp(MyApp());
 
 }
 
 class MyApp extends StatelessWidget {
-  final SharedPreferences prefs;
-  final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-  final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
-  MyApp({super.key, required this.prefs});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (ctx) => ProductsProvider(),
-        ),
+        ChangeNotifierProvider(create: (_) => AuthProviders()),
+        ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => OrdersProvider()),
+        ChangeNotifierProvider(create: (_) => ProductsProvider()),
       ],
-      child: GetMaterialApp(
-        title: 'PRINTONEX',
-        debugShowCheckedModeBanner: false,
+      child: MaterialApp(
+        title: 'KangleiMart',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
+          primarySwatch: Colors.blue,
+          hintColor: Colors.green,
+          fontFamily: 'Lato',
         ),
-        home: HomeScreen(),
+        initialRoute: '/', // Set initial route here
         routes: {
-          HomeScreen.routeName: (ctx) => HomeScreen(),
-          ProductScreen.routeName: (ctx) => ProductScreen(),
-          // Add other routes here
+          '/': (ctx) => HomeScreen(), // Define your routes
+          '/CartPage': (ctx) => CartPage(),
+          '/OrdersScreen': (ctx) =>OrdersScreen(),
+          '/ProfileScreen': (ctx) => ProfileScreen(),
+          '/ProductScreen': (ctx) => ProductScreen(),
+          // Add more routes as needed
         },
       ),
     );

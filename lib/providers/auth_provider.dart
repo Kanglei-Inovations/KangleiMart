@@ -14,7 +14,7 @@ class User {
   });
 }
 
-class AuthProvider with ChangeNotifier {
+class AuthProviders with ChangeNotifier {
   String? _token;
   String? _userId;
 

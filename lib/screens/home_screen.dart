@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.shopping_cart),
             onPressed: () {
-              Navigator.of(context).pushNamed('/cart');
+              Navigator.of(context).pushNamed('/CartPage');
             },
           ),
         ],
@@ -28,7 +28,9 @@ class HomeScreen extends StatelessWidget {
           if (dataSnapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else {
-            if (dataSnapshot.error != null) {
+            if (dataSnapshot.hasError) {
+              // Print the error message to the console
+              print(dataSnapshot.error);
               return Center(child: Text('An error occurred!'));
             } else {
               return Consumer<ProductsProvider>(
@@ -39,6 +41,7 @@ class HomeScreen extends StatelessWidget {
                     productsData.products[i].id,
                     productsData.products[i].title,
                     productsData.products[i].imageUrl,
+                      productsData.products[i].isFavorite,
                   ),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
@@ -52,6 +55,7 @@ class HomeScreen extends StatelessWidget {
           }
         },
       ),
+
     );
   }
 }

@@ -18,12 +18,12 @@ class ProductsProvider with ChangeNotifier {
           id: doc.id,
           title: doc['title'],
           description: doc['description'],
-          price: doc['price'],
+          price: doc['price'].toDouble(),
           imageUrl: doc['imageUrl'],
           category: doc['category'],
           stock: doc['stock'],
           rating: doc['rating'],
-          createdAt: doc['createdAt'].toDate(),
+          createdAt: doc['createdAt'],
         ));
       });
       _products = loadedProducts;

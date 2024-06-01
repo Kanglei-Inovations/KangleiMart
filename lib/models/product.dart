@@ -9,11 +9,11 @@ class Product with ChangeNotifier {
   final String imageUrl;
   final String category;
   final int stock;
-  final double rating;
-  final Timestamp createdAt ;
+  final int rating;
+  final Timestamp createdAt;
   bool isFavorite;
 
-  Product(  {
+  Product({
     required this.id,
     required this.title,
     required this.description,

@@ -4,7 +4,7 @@ import '../providers/products_provider.dart';
 import '../providers/cart_provider.dart';
 
 class ProductScreen extends StatelessWidget {
-  static const routeName = '/product';
+  static const routeName = '/ProductScreen';
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class ProductScreen extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Text(
-              '\$${loadedProduct.price}',
+              '\$${loadedProduct.stock}',
               style: TextStyle(
                 color: Colors.grey,
                 fontSize: 20,

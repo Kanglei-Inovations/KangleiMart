@@ -10,72 +10,84 @@ class ProductItem extends StatelessWidget {
   final String title;
   final String imageUrl;
 
-  ProductItem(this.id, this.title, this.imageUrl);
+  ProductItem(this.id, this.title, this.imageUrl, bool isFavorite);
 
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<CartProvider>(context, listen: false);
-    final auth = Provider.of<AuthProvider>(context, listen: false);
+    final auth = Provider.of<AuthProviders>(context, listen: false);
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: GridTile(
-        child: GestureDetector(
-          onTap: () {
-            Navigator.of(context).pushNamed(
-              ProductScreen.routeName,
-              arguments: id,
-            );
-          },
-          child: Image.network(
-            imageUrl,
-            fit: BoxFit.cover,
-          ),
-        ),
-        footer: GridTileBar(
-          backgroundColor: Colors.black87,
-          leading: Consumer<Product>(
-            builder: (ctx, product, _) => IconButton(
-              icon: Icon(
-                product.isFavorite ? Icons.favorite : Icons.favorite_border,
+    return GestureDetector(
+      onTap: () {
+        // Navigate to product details screen
+        Navigator.of(context).pushNamed('/ProductScreen', arguments: id);
+      },
+      child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Positioned(
+                left: 0,
+                top: 0,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.favorite ,
+                    color: Colors.red,
+                  ),
+                  onPressed: () {},
+                ),
               ),
-              color: Theme.of(context).colorScheme.secondary,
-              onPressed: () {
-                product.toggleFavoriteStatus(
-                  auth.token ?? '',
-                  auth.userId ?? '',
-                );
-              },
-            ),
-          ),
-          title: Text(
-            title,
-            textAlign: TextAlign.center,
-          ),
-          trailing: IconButton(
-            icon: Icon(
-              Icons.shopping_cart,
-            ),
-            color: Theme.of(context).colorScheme.secondary,
-            onPressed: () {
-              cart.addItem(id, title, 0); // Provide the price here as needed
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Added item to cart!'),
-                  duration: Duration(seconds: 2),
-                  action: SnackBarAction(
-                    label: 'UNDO',
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  SizedBox(height: 15),
+                  Expanded(
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: <Widget>[
+                        CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Colors.orange.withAlpha(40),
+                        ),
+                        Image.network(imageUrl,fit: BoxFit.cover,)
+                      ],
+                    ),
+                  ),
+                  // SizedBox(height: 5),
+                  Text(
+                    title,
+                    textAlign: TextAlign.center,
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.shopping_cart,
+                    ),
+                    color: Theme.of(context).colorScheme.secondary,
                     onPressed: () {
-                      cart.removeSingleItem(id);
+                      cart.addItem(id, title, 0); // Provide the price here as needed
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Added item to cart!'),
+                          duration: Duration(seconds: 2),
+                          action: SnackBarAction(
+                            label: 'UNDO',
+                            onPressed: () {
+                              cart.removeSingleItem(id);
+                            },
+                          ),
+                        ),
+                      );
                     },
                   ),
-                ),
-              );
-            },
+                ],
+              ),
+          ]
           ),
         ),
-      ),
     );
+
   }
 }
