@@ -23,7 +23,7 @@ class ProductsProvider with ChangeNotifier {
           category: doc['category'],
           stock: doc['stock'],
           rating: doc['rating'],
-          // createdAt: doc['createdAt'].toDate(),
+          createdAt: doc['createdAt'].toDate(),
         ));
       });
       _products = loadedProducts;

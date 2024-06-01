@@ -10,9 +10,10 @@ class Product with ChangeNotifier {
   final String category;
   final int stock;
   final double rating;
+  final Timestamp createdAt ;
   bool isFavorite;
 
-  Product({
+  Product(  {
     required this.id,
     required this.title,
     required this.description,
@@ -21,6 +22,7 @@ class Product with ChangeNotifier {
     required this.category,
     required this.stock,
     required this.rating,
+    required this.createdAt,
     this.isFavorite = false,
   });
 

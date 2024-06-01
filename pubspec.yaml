@@ -45,6 +45,7 @@ dependencies:
   shared_preferences:
   provider:
   get:
+  intl:
 
 
 dev_dependencies:

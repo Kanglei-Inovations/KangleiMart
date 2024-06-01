@@ -7,7 +7,9 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:kangleimart/firebase_options.dart';
 import 'package:kangleimart/providers/products_provider.dart';
-import 'package:kangleimart/widgets/bottom_nabvar.dart';
+import 'package:kangleimart/screens/home_screen.dart';
+import 'package:kangleimart/screens/product_screen.dart';
+
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -44,7 +46,12 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: ButtomNavbar(),
+        home: HomeScreen(),
+        routes: {
+          HomeScreen.routeName: (ctx) => HomeScreen(),
+          ProductScreen.routeName: (ctx) => ProductScreen(),
+          // Add other routes here
+        },
       ),
     );
   }
