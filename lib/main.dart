@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kangleimart/bottom_nabvar.dart';
+import 'package:kangleimart/widgets/bottom_nabvar.dart';
 
 void main() {
   runApp(const MyApp());

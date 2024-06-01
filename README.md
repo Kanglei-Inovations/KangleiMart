@@ -20,10 +20,9 @@ kanglei_mart/
 │   │
 │   ├── screens/              # UI Screens
 │   │   ├── home_screen.dart  # Home screen
-│   │   ├── product_screen.dart  # Product details screen
-│   │   ├── cart_screen.dart  # Cart screen
-│   │   ├── order_screen.dart # Order screen
-│   │   ├── login_screen.dart # Login screen
+│   │   ├── cart_page.dart  # Product details screen
+│   │   ├── order_history.dart  # Cart screen
+│   │   ├── setting_page.dart # 
 │   │   └── signup_screen.dart # Signup screen
 │   │
 │   ├── widgets/              # Reusable UI components
