@@ -41,7 +41,7 @@ class HomeScreen extends StatelessWidget {
                     productsData.products[i].id,
                     productsData.products[i].title,
                     productsData.products[i].imageUrl,
-                      productsData.products[i].isFavorite,
+                    productsData.products[i].isFavorite,
                   ),
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
