@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/cart_provider.dart';
@@ -9,8 +10,9 @@ class ProductItem extends StatelessWidget {
   final String id;
   final String title;
   final String imageUrl;
+  final double price;
 
-  ProductItem(this.id, this.title, this.imageUrl, bool isFavorite);
+  ProductItem(this.id, this.title, this.imageUrl, bool isFavorite, this.price);
 
   @override
   Widget build(BuildContext context) {
@@ -51,13 +53,31 @@ class ProductItem extends StatelessWidget {
                           radius: 40,
                           backgroundColor: Colors.orange.withAlpha(40),
                         ),
-                        Image.network(imageUrl,fit: BoxFit.cover,)
+                        // CachedNetworkImage(
+                        //   imageUrl: imageUrl,
+                        //   imageBuilder: (context, imageProvider) => Container(
+                        //     decoration: BoxDecoration(
+                        //       image: DecorationImage(
+                        //         image: imageProvider,
+                        //         fit: BoxFit.cover,
+                        //         colorFilter: const ColorFilter.mode(
+                        //           Colors.red,
+                        //           BlendMode.colorBurn,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
                   // SizedBox(height: 5),
                   Text(
                     title,
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    price.toString(),
                     textAlign: TextAlign.center,
                   ),
                   IconButton(
