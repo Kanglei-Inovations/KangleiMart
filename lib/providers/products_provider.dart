@@ -9,9 +9,9 @@ class ProductsProvider with ChangeNotifier {
     return [..._products];
   }
 
-  Future<void> fetchProducts() async {
-    try {
-      final QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('products').get();
+  // Stream to fetch products from Firestore
+  Stream<List<Product>> productsStream() {
+    return FirebaseFirestore.instance.collection('products').snapshots().map((snapshot) {
       final List<Product> loadedProducts = [];
       snapshot.docs.forEach((doc) {
         loadedProducts.add(Product(
@@ -28,9 +28,8 @@ class ProductsProvider with ChangeNotifier {
       });
       _products = loadedProducts;
       notifyListeners();
-    } catch (error) {
-      throw error;
-    }
+      return _products;
+    });
   }
 
   Product findById(String id) {

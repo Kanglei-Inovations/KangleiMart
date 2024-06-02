@@ -46,6 +46,14 @@ class CustomDrawer extends StatelessWidget {
               Navigator.of(context).pushReplacementNamed(ProfileScreen.routeName);
             },
           ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.account_circle),
+            title: Text('Settings'),
+            onTap: () {
+              Navigator.of(context).pushReplacementNamed(ProfileScreen.routeName);
+            },
+          ),
         ],
       ),
     );

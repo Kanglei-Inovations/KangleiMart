@@ -31,7 +31,7 @@ class ProductScreen extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Text(
-              '\$${loadedProduct.stock}',
+              '${loadedProduct.stock}',
               style: TextStyle(
                 color: Colors.grey,
                 fontSize: 20,

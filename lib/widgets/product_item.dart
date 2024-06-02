@@ -17,7 +17,7 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<CartProvider>(context, listen: false);
-    final auth = Provider.of<AuthProviders>(context, listen: false);
+    final auth = Provider.of<AuthProvider>(context, listen: false);
 
     return GestureDetector(
       onTap: () {
@@ -44,30 +44,26 @@ class ProductItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  SizedBox(height: 15),
+
                   Expanded(
                     child: Stack(
                       alignment: Alignment.center,
                       children: <Widget>[
-                        CircleAvatar(
-                          radius: 40,
-                          backgroundColor: Colors.orange.withAlpha(40),
+                        CachedNetworkImage(
+                          imageUrl: imageUrl,
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                                colorFilter: const ColorFilter.mode(
+                                  Colors.red,
+                                  BlendMode.colorBurn,
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
-                        // CachedNetworkImage(
-                        //   imageUrl: imageUrl,
-                        //   imageBuilder: (context, imageProvider) => Container(
-                        //     decoration: BoxDecoration(
-                        //       image: DecorationImage(
-                        //         image: imageProvider,
-                        //         fit: BoxFit.cover,
-                        //         colorFilter: const ColorFilter.mode(
-                        //           Colors.red,
-                        //           BlendMode.colorBurn,
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),

@@ -1,20 +1,20 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:kangleimart/firebase_options.dart';
-import 'package:kangleimart/screens/home_screen.dart';
-import 'package:kangleimart/screens/profile_screen.dart';
-
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'providers/auth_provider.dart';
-import 'providers/cart_provider.dart';
-import 'providers/orders_provider.dart';
-import 'providers/products_provider.dart';
-import 'screens/cart_page.dart';
-import 'screens/orders_screen.dart';
-import 'screens/product_screen.dart';
+import 'package:kangleimart/providers/auth_provider.dart';
+import 'package:kangleimart/providers/cart_provider.dart';
+import 'package:kangleimart/providers/orders_provider.dart';
+import 'package:kangleimart/providers/products_provider.dart';
+import 'package:kangleimart/screens/cart_page.dart';
+import 'package:kangleimart/screens/orders_screen.dart';
+import 'package:kangleimart/screens/profile_screen.dart';
+import 'package:kangleimart/screens/product_screen.dart';
+import 'package:kangleimart/screens/login_screen.dart';
+import 'package:kangleimart/screens/signup_screen.dart';
+import 'package:kangleimart/screens/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +24,6 @@ void main() async {
   ));
   SharedPreferences prefs = await SharedPreferences.getInstance();
   runApp(MyApp());
-
 }
 
 class MyApp extends StatelessWidget {
@@ -32,27 +31,33 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthProviders()),
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => OrdersProvider()),
         ChangeNotifierProvider(create: (_) => ProductsProvider()),
       ],
-      child: MaterialApp(
-        title: 'KangleiMart',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          hintColor: Colors.green,
-          fontFamily: 'Lato',
+      child: Consumer<AuthProvider>(
+        builder: (ctx, auth, _) => MaterialApp(
+          title: 'KangleiMart',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+            hintColor: Colors.green,
+            fontFamily: 'Lato',
+          ),
+          home: auth.isLoggedIn ? HomeScreen() : LoginScreen(),
+          routes: {
+            '/SignUpScreen': (ctx) => SignUpScreen(),
+            '/LoginScreen': (ctx) => LoginScreen(),
+            '/HomeScreen': (ctx) => HomeScreen(),
+            '/ProductScreen': (ctx) => ProductScreen(),
+            '/CartPage': (ctx) => CartPage(),
+            '/OrdersScreen': (ctx) => OrdersScreen(),
+            '/ProfileScreen': (ctx) => ProfileScreen(),
+
+
+
+          },
         ),
-        initialRoute: '/', // Set initial route here
-        routes: {
-          '/': (ctx) => HomeScreen(), // Define your routes
-          '/CartPage': (ctx) => CartPage(),
-          '/OrdersScreen': (ctx) =>OrdersScreen(),
-          '/ProfileScreen': (ctx) => ProfileScreen(),
-          '/ProductScreen': (ctx) => ProductScreen(),
-          // Add more routes as needed
-        },
       ),
     );
   }

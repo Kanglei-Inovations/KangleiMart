@@ -5,7 +5,7 @@ import '../widgets/cart_item.dart' as CartItemWidget;
 import '../widgets/custom_drawer.dart';
 
 class CartPage extends StatelessWidget {
-  static const routeName = '/card';
+  static const routeName = '/CartPage';
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,8 @@ class CartPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Your Cart'),
       ),
-      drawer: CustomDrawer(),
+
+
       body: Column(
         children: <Widget>[
           Card(

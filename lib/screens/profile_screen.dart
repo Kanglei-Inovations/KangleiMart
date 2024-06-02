@@ -4,11 +4,11 @@ import '../providers/auth_provider.dart';
 import '../widgets/custom_drawer.dart';
 
 class ProfileScreen extends StatelessWidget {
-  static const routeName = '/profile';
+  static const routeName = '/ProfileScreen';
 
   @override
   Widget build(BuildContext context) {
-    final authData = Provider.of<AuthProviders>(context);
+    final authData = Provider.of<AuthProvider>(context);
     final user = authData.user;
 
     return Scaffold(
@@ -23,11 +23,11 @@ class ProfileScreen extends StatelessWidget {
           children: <Widget>[
             CircleAvatar(
               radius: 50,
-              backgroundImage: NetworkImage(user?.profileImageUrl ?? 'https://example.com/default-avatar.png'),
+              backgroundImage: NetworkImage(user?.photoURL ?? 'https://example.com/default-avatar.png'),
             ),
             SizedBox(height: 16),
             Text(
-              'Name: ${user?.name}',
+              'Name: ${user?.displayName}',
               style: TextStyle(fontSize: 20),
             ),
             SizedBox(height: 8),

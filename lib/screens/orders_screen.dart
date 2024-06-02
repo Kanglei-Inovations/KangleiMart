@@ -6,7 +6,7 @@ import '../widgets/custom_drawer.dart';
 import '../models/order_item.dart';
 
 class OrdersScreen extends StatelessWidget {
-  static const routeName = '/orders';
+  static const routeName = '/OrdersScreen';
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class OrdersScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Your Orders'),
       ),
-      drawer: CustomDrawer(),
+
       body:
       ListView.builder(
         itemCount: orderData.orders.length,

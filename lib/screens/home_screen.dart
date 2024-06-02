@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:kangleimart/models/product.dart';
+import 'package:kangleimart/widgets/custom_drawer.dart';
 import 'package:provider/provider.dart';
 import '../providers/products_provider.dart';
 import '../widgets/product_item.dart';
-
 
 class HomeScreen extends StatelessWidget {
   static const routeName = '/home';
@@ -21,9 +23,10 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-
-      body: FutureBuilder(
-        future: Provider.of<ProductsProvider>(context, listen: false).fetchProducts(),
+      drawer: CustomDrawer(),
+      body: StreamBuilder(
+        stream: Provider.of<ProductsProvider>(context, listen: false)
+            .productsStream(),
         builder: (ctx, dataSnapshot) {
           if (dataSnapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -56,7 +59,6 @@ class HomeScreen extends StatelessWidget {
           }
         },
       ),
-
     );
   }
 }
