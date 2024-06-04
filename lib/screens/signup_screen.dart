@@ -63,7 +63,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
-                  final authProvider = Provider.of<AuthProvider>(context, listen: false);
+                  final authProvider = Provider.of<AuthProviders>(context, listen: false);
                   await authProvider.signup(_emailController.text, _passwordController.text);
                   if (authProvider.isLoggedIn) {
                     Navigator.of(context).pushNamed('/HomeScreen');

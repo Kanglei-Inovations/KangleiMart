@@ -17,8 +17,8 @@ class _LoginScreenState extends State<LoginScreen> {
     final isValid = _formKey.currentState!.validate();
     if (isValid) {
       _formKey.currentState!.save();
-      Provider.of<AuthProvider>(context, listen: false).login(_email, _password);
-      if (Provider.of<AuthProvider>(context, listen: false).isLoggedIn) {
+      Provider.of<AuthProviders>(context, listen: false).login(_email, _password);
+      if (Provider.of<AuthProviders>(context, listen: false).isLoggedIn) {
         Navigator.of(context).pushNamed('/HomeScreen');
       }
     }

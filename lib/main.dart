@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,20 +26,25 @@ void main() async {
     statusBarColor: Colors.deepPurpleAccent, // Change this to your desired color
   ));
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  runApp(MyApp());
+  runApp(MyApp(prefs: prefs));
 }
 
 class MyApp extends StatelessWidget {
+  final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  final FirebaseStorage firebaseStorage =  FirebaseStorage.instance;
+  final SharedPreferences prefs;
+  MyApp({super.key, required this.prefs});
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(
+            create: (_) => AuthProviders()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => OrdersProvider()),
         ChangeNotifierProvider(create: (_) => ProductsProvider()),
       ],
-      child: Consumer<AuthProvider>(
+      child: Consumer<AuthProviders>(
         builder: (ctx, auth, _) => MaterialApp(
           title: 'KangleiMart',
           theme: ThemeData(
@@ -44,7 +52,7 @@ class MyApp extends StatelessWidget {
             hintColor: Colors.green,
             fontFamily: 'Lato',
           ),
-          home: auth.isLoggedIn ? HomeScreen() : LoginScreen(),
+          home: AuthChecker(),
           routes: {
             '/SignUpScreen': (ctx) => SignUpScreen(),
             '/LoginScreen': (ctx) => LoginScreen(),
@@ -60,5 +68,45 @@ class MyApp extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+class AuthChecker extends StatefulWidget {
+
+  @override
+  State<AuthChecker> createState() => _AuthCheckerState();
+}
+
+class _AuthCheckerState extends State<AuthChecker> {
+  bool? isLoggedIn;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkAuthStatus();
+  }
+
+  Future<void> _checkAuthStatus() async {
+    bool loggedIn = await Provider.of<AuthProviders>(context, listen: false).checkAuthStatus();
+    setState(() {
+      isLoggedIn = loggedIn;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (isLoggedIn == null) {
+      // Still checking auth status
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    } else if (isLoggedIn!) {
+      // User is logged in
+      return HomeScreen();
+    } else {
+      // User is not logged in
+      return LoginScreen();
+    }
   }
 }

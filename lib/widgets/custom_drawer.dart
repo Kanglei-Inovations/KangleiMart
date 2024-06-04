@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kangleimart/providers/auth_provider.dart';
+import 'package:kangleimart/screens/login_screen.dart';
+import 'package:provider/provider.dart';
 import '../screens/home_screen.dart';
 import '../screens/cart_page.dart';
 import '../screens/orders_screen.dart';
@@ -53,6 +56,15 @@ class CustomDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pushReplacementNamed(ProfileScreen.routeName);
             },
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.logout),
+            title: Text('Log Out'),
+            onTap: () {
+              Provider.of<AuthProviders>(context, listen: false).logout;
+              Navigator.of(context).pushNamed('/LoginScreen');
+                          },
           ),
         ],
       ),
