@@ -125,11 +125,11 @@ class ProductItem extends StatelessWidget {
                 ],
               ),
               Positioned(
-                left: 10,
+                right: 0,
                 top: 0,
                 child: IconButton(
                   icon: Icon(
-                    Icons.favorite ,
+                    Icons.favorite_border ,
                     color: Colors.red,
                   ),
                   onPressed: () {},
