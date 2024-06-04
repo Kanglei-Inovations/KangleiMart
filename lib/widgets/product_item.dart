@@ -29,24 +29,11 @@ class ProductItem extends StatelessWidget {
       },
       child: Card(
         elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
+        clipBehavior: Clip.antiAlias,
 
         child: Stack(
             alignment: Alignment.center,
             children: [
-              Positioned(
-                left: 10,
-                top: 0,
-                child: IconButton(
-                  icon: Icon(
-                    Icons.favorite ,
-                    color: Colors.red,
-                  ),
-                  onPressed: () {},
-                ),
-              ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -64,7 +51,7 @@ class ProductItem extends StatelessWidget {
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: CachedNetworkImageProvider(imageUrl),
-                                fit: BoxFit.fitHeight,
+                                fit: BoxFit.fill,
 
                               ),
                             ),
@@ -136,6 +123,17 @@ class ProductItem extends StatelessWidget {
                     ),
                   ),
                 ],
+              ),
+              Positioned(
+                left: 10,
+                top: 0,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.favorite ,
+                    color: Colors.red,
+                  ),
+                  onPressed: () {},
+                ),
               ),
             ]
         ),
