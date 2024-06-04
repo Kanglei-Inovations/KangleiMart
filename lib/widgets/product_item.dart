@@ -28,10 +28,7 @@ class ProductItem extends StatelessWidget {
       },
       child: Card(
         elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-
+        clipBehavior: Clip.antiAlias,
         child: Stack(
             alignment: Alignment.center,
             children: [
@@ -91,11 +88,13 @@ class ProductItem extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ElevatedButton(
+                        MaterialButton(
                           onPressed: () {
                             // Handle buy action
                           },
-                          child: Text('Buy Now'),
+                          child: Container(
+                            
+                              child: Text('Buy Now')),
                         ),
                         IconButton(
                           icon: Icon(
