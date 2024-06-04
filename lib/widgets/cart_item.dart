@@ -19,6 +19,7 @@ class CartItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var errorColor = Colors.red;
     return Dismissible(
       key: ValueKey(id),
       direction: DismissDirection.endToStart,
@@ -49,7 +50,7 @@ class CartItem extends StatelessWidget {
         );
       },
       background: Container(
-        color: Theme.of(context).errorColor,
+        color: Colors.red,
         child: Icon(
           Icons.delete,
           color: Colors.white,
