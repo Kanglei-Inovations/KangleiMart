@@ -8,6 +8,8 @@ import '../screens/orders_screen.dart';
 import '../screens/profile_screen.dart';
 
 class CustomDrawer extends StatelessWidget {
+  const CustomDrawer({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Drawer(

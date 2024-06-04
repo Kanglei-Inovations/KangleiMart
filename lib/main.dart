@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kangleimart/firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,28 +46,40 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ProductsProvider()),
       ],
       child: Consumer<AuthProviders>(
-        builder: (ctx, auth, _) => MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'KangleiMart',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            hintColor: Colors.green,
-            fontFamily: 'Lato',
-          ),
-          home: AuthChecker(),
-          routes: {
-            '/SignUpScreen': (ctx) => SignUpScreen(),
-            '/LoginScreen': (ctx) => LoginScreen(),
-            '/HomeScreen': (ctx) => HomeScreen(),
-            '/ProductScreen': (ctx) => ProductScreen(),
-            '/CartPage': (ctx) => CartPage(),
-            '/OrdersScreen': (ctx) => OrdersScreen(),
-            '/ProfileScreen': (ctx) => ProfileScreen(),
+        builder: (ctx, auth, _) {
+          return ScreenUtilInit(
+            designSize: const Size(375, 812),
+            builder: (context, child){
+              return MaterialApp(
+                debugShowCheckedModeBanner: false,
+                title: 'KangleiMart',
+                theme: ThemeData(
+                  primarySwatch: Colors.blue,
+                  hintColor: Colors.green,
+                  fontFamily: 'Lato',
+                  textTheme: TextTheme(
+                    bodySmall: TextStyle(fontSize: 16.sp),
+                    bodyMedium: TextStyle(fontSize: 18.sp),
+                    bodyLarge: TextStyle(fontSize: 22.sp)
+                  )
+                ),
+                home: AuthChecker(),
+                routes: {
+                  '/SignUpScreen': (ctx) => SignUpScreen(),
+                  '/LoginScreen': (ctx) => LoginScreen(),
+                  '/HomeScreen': (ctx) => HomeScreen(),
+                  '/ProductScreen': (ctx) => ProductScreen(),
+                  '/CartPage': (ctx) => CartPage(),
+                  '/OrdersScreen': (ctx) => OrdersScreen(),
+                  '/ProfileScreen': (ctx) => ProfileScreen(),
 
 
 
-          },
-        ),
+                },
+              );
+            },
+          );
+        }
       ),
     );
   }

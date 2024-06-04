@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kangleimart/utils/color_const.dart';
 import 'package:provider/provider.dart';
 import '../providers/cart_provider.dart';
@@ -31,23 +32,23 @@ class ProductItem extends StatelessWidget {
       child: Card(
         margin: EdgeInsets.zero,
         color: Colors.white,
-        elevation: 5,
+        elevation: 10,
         clipBehavior: Clip.antiAlias,
-        child: Stack( children: [
+        child: Stack(children: [
           Stack(
             children: [
               Column(
                 children: <Widget>[
                   Flexible(
-                    flex:2,
+                    flex: 2,
                     child: Stack(
                       children: <Widget>[
                         Container(
-                          height: 200, // Set a height for the container
+                          height: 140.h, // Set a height for the container
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               image: CachedNetworkImageProvider(imageUrl),
-                              fit: BoxFit.fill,
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ),
@@ -55,15 +56,18 @@ class ProductItem extends StatelessWidget {
                     ),
                   ),
                   Flexible(
-
                       child: Column(
                     children: [
-                      SizedBox(height: 10),
-                      Text(
-                        title,
-                        style: TextStyle(
-                          fontSize: 21,
-                          fontWeight: FontWeight.bold,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(
+                          title,
+                          overflow: TextOverflow.fade,
+                          maxLines: 1,
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                       Padding(
@@ -73,15 +77,19 @@ class ProductItem extends StatelessWidget {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 8.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                      Text(
-                        rupee + price.toString(),
-                        style: TextStyle(
-                          fontSize: 18,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          rupee + price.toString(),
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.bold
+                          ),
                         ),
                       ),
                       RatingBarIndicator(
@@ -91,7 +99,7 @@ class ProductItem extends StatelessWidget {
                           color: Colors.amber,
                         ),
                         itemCount: 5,
-                        itemSize: 25.0,
+                        itemSize:18.sp,
                         direction: Axis.horizontal,
                       ),
                     ],
@@ -99,7 +107,6 @@ class ProductItem extends StatelessWidget {
                   // SizedBox(height: 5),
                 ],
               ),
-
             ],
           ),
           Positioned(
@@ -120,12 +127,12 @@ class ProductItem extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  child:  MaterialButton(
+                  child: MaterialButton(
+                    height: 30.h,
                     onPressed: () {
                       // Define what happens when the button is pressed
                       ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('MaterialButton pressed!'))
-                      );
+                          SnackBar(content: Text('MaterialButton pressed!')));
                     },
                     color: Colors.green,
                     textColor: Colors.white,
@@ -133,17 +140,20 @@ class ProductItem extends StatelessWidget {
                     splashColor: Colors.blueAccent,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(10.0))
-                    ),
+                            bottomLeft: Radius.circular(10.0))),
                     child: Text(
                       'Buy Now',
-                      style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: 10.sp, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
-                SizedBox(width: 1,),
+                SizedBox(
+                  width: 1,
+                ),
                 Expanded(
-                  child:  MaterialButton(
+                  child: MaterialButton(
+                    height: 30.h,
                     onPressed: () {
                       cart.addItem(
                           id, title, 0); // Provide the price here as needed
@@ -167,14 +177,15 @@ class ProductItem extends StatelessWidget {
                     splashColor: Colors.blueAccent,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
-                            bottomRight: Radius.circular(10.0))
-                    ),
+                            bottomRight: Radius.circular(10.0))),
                     child: Text(
                       'Add to Cart',
-                      style: TextStyle(fontSize: 18.0,fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: 10.sp, fontWeight: FontWeight.bold),
                     ),
                   ),
-                ),              ],
+                ),
+              ],
             ),
           )
         ]),
