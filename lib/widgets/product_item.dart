@@ -64,11 +64,8 @@ class ProductItem extends StatelessWidget {
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: CachedNetworkImageProvider(imageUrl),
-                                fit: BoxFit.cover,
-                                colorFilter: const ColorFilter.mode(
-                                  Colors.red,
-                                  BlendMode.colorBurn,
-                                ),
+                                fit: BoxFit.fitHeight,
+
                               ),
                             ),
                           ),
