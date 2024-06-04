@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:kangleimart/utils/color_const.dart';
 import 'package:provider/provider.dart';
 import '../providers/cart_provider.dart';
@@ -55,14 +56,19 @@ class ProductItem extends StatelessWidget {
                     child: Stack(
                       alignment: Alignment.center,
                       children: <Widget>[
-                        CachedNetworkImage(
-                          imageUrl: imageUrl,
-                          imageBuilder: (context, imageProvider) => Container(
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Container(
+                            height: 150, // Set a height for the container
+                            width: double.infinity, // Set a width to fill the parent
                             decoration: BoxDecoration(
                               image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.fill,
-
+                                image: CachedNetworkImageProvider(imageUrl),
+                                fit: BoxFit.cover,
+                                colorFilter: const ColorFilter.mode(
+                                  Colors.red,
+                                  BlendMode.colorBurn,
+                                ),
                               ),
                             ),
                           ),
@@ -85,6 +91,16 @@ class ProductItem extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18,
                     ),
+                  ),
+                  RatingBarIndicator(
+                    rating: rating.toDouble(),
+                    itemBuilder: (context, index) => Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    itemCount: 5,
+                    itemSize: 25.0,
+                    direction: Axis.horizontal,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
