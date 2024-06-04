@@ -24,65 +24,62 @@ class ProductItem extends StatelessWidget {
         // Navigate to product details screen
         Navigator.of(context).pushNamed('/ProductScreen', arguments: id);
       },
-      child: Container(
-        /// new  sdfhgfg h
-        color: Colors.white,
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Positioned(
-                left: 0,
-                top: 0,
-                child: IconButton(
-                  icon: Icon(
-                    Icons.favorite ,
-                    color: Colors.red,
+      child: Card(
+      elevation: 5,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child:
+              CachedNetworkImage(
+                imageUrl: imageUrl,
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                      colorFilter: const ColorFilter.mode(
+                        Colors.red,
+                        BlendMode.colorBurn,
+                      ),
+                    ),
                   ),
-                  onPressed: () {},
                 ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-
-                  Expanded(
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: <Widget>[
-                        CachedNetworkImage(
-                          imageUrl: imageUrl,
-                          imageBuilder: (context, imageProvider) => Container(
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.cover,
-                                colorFilter: const ColorFilter.mode(
-                                  Colors.red,
-                                  BlendMode.colorBurn,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // SizedBox(height: 5),
-                  Text(
-                    title,
-                    textAlign: TextAlign.center,
-                  ),
-                  Text(
-                    price.toString(),
-                    textAlign: TextAlign.center,
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.shopping_cart,
-                    ),
-                    color: Theme.of(context).colorScheme.secondary,
+            ),
+            SizedBox(height: 10),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 10),
+            Text(
+              price.toString(),
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.green,
+              ),
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    // Handle buy action
+                  },
+                  child: Text('Buy'),
+                ),
+                IconButton(
                     onPressed: () {
                       cart.addItem(id, title, 0); // Provide the price here as needed
                       ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -99,12 +96,14 @@ class ProductItem extends StatelessWidget {
                         ),
                       );
                     },
-                  ),
-                ],
-              ),
-          ]
-          ),
+                  icon: Icon(Icons.add_shopping_cart_outlined)
+                ),
+              ],
+            ),
+          ],
         ),
+      ),
+    ),
     );
 
   }
