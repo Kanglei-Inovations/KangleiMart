@@ -25,7 +25,8 @@ class ProductItem extends StatelessWidget {
         Navigator.of(context).pushNamed('/ProductScreen', arguments: id);
       },
       child: Container(
-        color: Colors.brown,
+        /// new code
+        color: Colors.red,
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Stack(
             alignment: Alignment.center,
