@@ -12,8 +12,9 @@ class ProductItem extends StatelessWidget {
   final String title;
   final String imageUrl;
   final double price;
+  final int rating;
 
-  ProductItem(this.id, this.title, this.imageUrl, bool isFavorite, this.price);
+  ProductItem(this.id, this.title, this.imageUrl, bool isFavorite, this.price, this.rating);
 
   @override
   Widget build(BuildContext context) {
