@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:kangleimart/utils/color_const.dart';
 import 'package:provider/provider.dart';
 import '../providers/cart_provider.dart';
 import '../providers/auth_provider.dart';
@@ -79,10 +80,9 @@ class ProductItem extends StatelessWidget {
                   ),
 
                   Text(
-                    price.toString(),
+                    rupee+price.toString(),
                     style: TextStyle(
                       fontSize: 18,
-                      color: Colors.green,
                     ),
                   ),
                   Padding(
@@ -94,7 +94,7 @@ class ProductItem extends StatelessWidget {
                           onPressed: () {
                             // Handle buy action
                           },
-                          child: Text('Buy'),
+                          child: Text('Buy Now'),
                         ),
                         IconButton(
                           icon: Icon(
