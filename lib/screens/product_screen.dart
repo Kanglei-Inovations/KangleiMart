@@ -7,6 +7,8 @@ import '../providers/cart_provider.dart';
 class ProductScreen extends StatelessWidget {
   static const routeName = '/ProductScreen';
 
+  const ProductScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final productId = ModalRoute.of(context)!.settings.arguments as String;
@@ -14,7 +16,6 @@ class ProductScreen extends StatelessWidget {
       context,
       listen: false,
     ).findById(productId);
-
     return Scaffold(
       appBar: AppBar(
         title: Text(loadedProduct.title),
@@ -22,7 +23,7 @@ class ProductScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Container(
+            SizedBox(
               height: 300,
               width: double.infinity,
               child: CachedNetworkImage(
@@ -38,17 +39,17 @@ class ProductScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text(
               '${loadedProduct.stock}',
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.grey,
                 fontSize: 20,
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               width: double.infinity,
               child: Text(
                 loadedProduct.description,
@@ -56,7 +57,7 @@ class ProductScreen extends StatelessWidget {
                 softWrap: true,
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
                 Provider.of<CartProvider>(context, listen: false).addItem(
@@ -67,8 +68,8 @@ class ProductScreen extends StatelessWidget {
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('Added item to cart!'),
-                    duration: Duration(seconds: 2),
+                    content: const Text('Added item to cart!'),
+                    duration: const Duration(seconds: 2),
                     action: SnackBarAction(
                       label: 'UNDO',
                       onPressed: () {
@@ -79,7 +80,7 @@ class ProductScreen extends StatelessWidget {
                   ),
                 );
               },
-              child: Text('Add to Cart'),
+              child: const Text('Add to Cart'),
             ),
           ],
         ),
