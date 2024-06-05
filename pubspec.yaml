@@ -50,6 +50,7 @@ dependencies:
   smooth_star_rating_null_safety: ^1.0.4+2
   flutter_rating_bar: ^4.0.0
   flutter_screenutil: ^5.9.3
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:

@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:kangleimart/firebase_options.dart';
+import 'package:kangleimart/utils/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kangleimart/providers/auth_provider.dart';
@@ -50,19 +52,12 @@ class MyApp extends StatelessWidget {
           return ScreenUtilInit(
             designSize: const Size(375, 812),
             builder: (context, child){
-              return MaterialApp(
+              return GetMaterialApp(
                 debugShowCheckedModeBanner: false,
                 title: 'KangleiMart',
-                theme: ThemeData(
-                  primarySwatch: Colors.blue,
-                  hintColor: Colors.green,
-                  fontFamily: 'Lato',
-                  textTheme: TextTheme(
-                    bodySmall: TextStyle(fontSize: 16.sp),
-                    bodyMedium: TextStyle(fontSize: 18.sp),
-                    bodyLarge: TextStyle(fontSize: 22.sp)
-                  )
-                ),
+                theme: TAppTheme.lightTheme,
+                darkTheme: TAppTheme.darkTheme,
+                themeMode: ThemeMode.system,
                 home: AuthChecker(),
                 routes: {
                   '/SignUpScreen': (ctx) => SignUpScreen(),
