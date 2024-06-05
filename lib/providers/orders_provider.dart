@@ -17,8 +17,8 @@ class OrdersProvider with ChangeNotifier {
     try {
       final List<OrderItem> loadedOrders = [];
       final ordersSnapshot = await _firestore.collection('orders').get();
-      ordersSnapshot.docs.forEach((orderDoc) {
-        final List<CartItem> cartProducts = (orderDoc.data()!['products'] as List<dynamic>).map((item) {
+      for (var orderDoc in ordersSnapshot.docs) {
+        final List<CartItem> cartProducts = (orderDoc.data()['products'] as List<dynamic>).map((item) {
           return CartItem(
             id: item['id'],
             title: item['title'],
@@ -38,13 +38,13 @@ class OrdersProvider with ChangeNotifier {
 
         final order = OrderItem(
           id: orderDoc.id,
-          amount: orderDoc.data()!['amount'],
-          dateTime: (orderDoc.data()!['dateTime'] as Timestamp).toDate(),
+          amount: orderDoc.data()['amount'],
+          dateTime: (orderDoc.data()['dateTime'] as Timestamp).toDate(),
           products: orderProducts,
         );
 
         loadedOrders.add(order);
-      });
+      }
 
       _orders = loadedOrders;
       notifyListeners();

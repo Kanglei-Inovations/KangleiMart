@@ -4,21 +4,30 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kangleimart/utils/color_const.dart';
 import 'package:provider/provider.dart';
+import '../models/brand_model.dart';
 import '../providers/cart_provider.dart';
 import '../providers/auth_provider.dart';
 import '../screens/product_screen.dart';
 import '../models/product.dart';
 
 class ProductItem extends StatelessWidget {
+  // final String id;
+  // final String? title;
+  // final String? thumbnail;
+  // final double? price;
+  // final int? rating;
+  //
+  // const ProductItem(this.id, this.title, this.thumbnail, bool isFavorite, this.price,
+  //     this.rating, {super.key});
   final String id;
   final String title;
-  final String imageUrl;
-  final double price;
-  final int rating;
+  final String price;
+  final String thumbnail;
+  final String description;
+  BrandModel? brand;
 
-  ProductItem(this.id, this.title, this.imageUrl, bool isFavorite, this.price,
-      this.rating);
 
+  ProductItem(this.id, this.title, this.price, this.thumbnail, this.description, this.brand);
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<CartProvider>(context, listen: false);
@@ -47,7 +56,7 @@ class ProductItem extends StatelessWidget {
                           height: 140.h, // Set a height for the container
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: CachedNetworkImageProvider(imageUrl),
+                              image: CachedNetworkImageProvider(thumbnail!),
                               fit: BoxFit.contain,
                             ),
                           ),
@@ -73,8 +82,8 @@ class ProductItem extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: Text(
-                          'To create a rating star widget in Flutter, you can use the SmoothStarRating package or build a custom widget. ',
-                          maxLines: 2,
+                        description,
+                        maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 8.sp,
@@ -92,16 +101,26 @@ class ProductItem extends StatelessWidget {
                           ),
                         ),
                       ),
-                      RatingBarIndicator(
-                        rating: rating.toDouble(),
-                        itemBuilder: (context, index) => Icon(
-                          Icons.star,
-                          color: Colors.amber,
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                            brand?.name ?? 'N/A',
+                          style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.bold
+                          ),
                         ),
-                        itemCount: 5,
-                        itemSize:18.sp,
-                        direction: Axis.horizontal,
                       ),
+                      // RatingBarIndicator(
+                      //   rating: rating!.toDouble(),
+                      //   itemBuilder: (context, index) => Icon(
+                      //     Icons.star,
+                      //     color: Colors.amber,
+                      //   ),
+                      //   itemCount: 5,
+                      //   itemSize:18.sp,
+                      //   direction: Axis.horizontal,
+                      // ),
                     ],
                   ))
                   // SizedBox(height: 5),
@@ -156,7 +175,7 @@ class ProductItem extends StatelessWidget {
                     height: 30.h,
                     onPressed: () {
                       cart.addItem(
-                          id, title, 0); // Provide the price here as needed
+                          id, title!, 0); // Provide the price here as needed
                       ScaffoldMessenger.of(context).hideCurrentSnackBar();
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
