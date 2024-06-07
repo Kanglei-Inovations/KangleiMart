@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:kangleimart/firebase_options.dart';
+import 'package:kangleimart/screens/SingleProductScreen.dart';
 import 'package:kangleimart/utils/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   final FirebaseStorage firebaseStorage =  FirebaseStorage.instance;
   final SharedPreferences prefs;
+  
   MyApp({super.key, required this.prefs});
   @override
   Widget build(BuildContext context) {
@@ -67,9 +68,6 @@ class MyApp extends StatelessWidget {
                   '/CartPage': (ctx) => CartPage(),
                   '/OrdersScreen': (ctx) => OrdersScreen(),
                   '/ProfileScreen': (ctx) => ProfileScreen(),
-
-
-
                 },
               );
             },
@@ -112,7 +110,7 @@ class _AuthCheckerState extends State<AuthChecker> {
       );
     } else if (isLoggedIn!) {
       // User is logged in
-      return HomeScreen();
+      return ProductScreen();
     } else {
       // User is not logged in
       return LoginScreen();
