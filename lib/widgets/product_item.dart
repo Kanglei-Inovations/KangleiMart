@@ -24,10 +24,10 @@ class ProductItem extends StatelessWidget {
   final String price;
   final String thumbnail;
   final String description;
-  BrandModel? brand;
+   final String? brandId;
 
 
-  ProductItem(this.id, this.title, this.price, this.thumbnail, this.description, this.brand);
+  ProductItem(this.id, this.title, this.price, this.thumbnail, this.description, this.brandId);
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<CartProvider>(context, listen: false);
@@ -104,7 +104,7 @@ class ProductItem extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 8.0),
                         child: Text(
-                            brand?.name ?? 'N/A',
+                          brandId ?? 'N/A',
                           style: TextStyle(
                               fontSize: 14.sp,
                               fontWeight: FontWeight.bold

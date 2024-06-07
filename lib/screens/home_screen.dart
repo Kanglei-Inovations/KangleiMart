@@ -45,7 +45,7 @@ class HomeScreen extends StatelessWidget {
                   product.id, product.title,
                   product.price.toStringAsFixed(2), product.thumbnail,
                   product.description.toString(),
-                  product.brand
+                  product.brandId
                   //product.thumbnail.toString()
                 );
               },
