@@ -4,7 +4,7 @@
 // import '../models/product_model.dart';
 // import '../providers/products_provider.dart';
 // import '../providers/cart_provider.dart';
-// import 'SingleProductScreen.dart';
+// import 'product_detail_screen.dart';
 //
 // class ProductScreen extends StatelessWidget {
 //   static const routeName = '/ProductScreen';

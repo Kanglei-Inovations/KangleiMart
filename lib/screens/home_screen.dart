@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import '../models/product_model.dart';
 import '../providers/products_provider.dart';
 import '../widgets/product_item.dart';
-import 'SingleProductScreen.dart';
+import 'product_detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
  static const routeName = '/home';
@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => SingleProductScreen(product: product),
+                              builder: (context) => ProductDetailScreen(product: product),
                             ),
                           );
                         },
