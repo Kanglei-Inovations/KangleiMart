@@ -1,15 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:kangleimart/models/product.dart';
 import 'package:kangleimart/widgets/custom_drawer.dart';
 import 'package:provider/provider.dart';
 import '../models/product_model.dart';
 import '../providers/products_provider.dart';
 import '../widgets/product_item.dart';
+import 'SingleProductScreen.dart';
 
-class HomeScreen extends StatelessWidget {
-  static const routeName = '/home';
+class HomeScreen extends StatefulWidget {
+ static const routeName = '/home';
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,32 +36,112 @@ class HomeScreen extends StatelessWidget {
         stream: Provider.of<ProductProvider>(context).streamProducts(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            // Print the error message to the console
-            print(snapshot.error);
-            return const Center(child: Text('An error occurred!'));
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text('No products available.'));
           } else {
             final products = snapshot.data!;
             return GridView.builder(
-              padding: const EdgeInsets.all(10.0),
+              padding: EdgeInsets.all(4.sp),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, // Number of columns in the grid
+                crossAxisSpacing: 8.0,
+                mainAxisSpacing: 8.0,
+                childAspectRatio: 2/3 // Adjust based on your design
+              ),
               itemCount: products.length,
               itemBuilder: (context, index) {
                 final product = products[index];
-                return ProductItem(
-                  product.id, product.title,
-                  product.price.toStringAsFixed(2), product.thumbnail,
-                  product.description.toString(),
-                  product.brandId
-                  //product.thumbnail.toString()
+                double discountPercentage = 0;
+                if (product.price > 0) {
+                  discountPercentage =
+                      ((product.price - product.salesPrice) / product.price) * 100;
+                }
+
+                return FutureBuilder<String>(
+                  future: Provider.of<ProductProvider>(context, listen: false)
+                      .getCategoryName(product.categoryId ?? ''),
+                  builder: (context, categorySnapshot) {
+                    if (categorySnapshot.connectionState == ConnectionState.waiting) {
+                      return GridTile(
+                        header: Text(product.title),
+                        child: Center(child: CircularProgressIndicator()),
+                      );
+                    } else if (categorySnapshot.hasError) {
+                      return GridTile(
+                        header: Text(product.title),
+                        child: Center(child: Text('Error loading category')),
+                      );
+                    } else {
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SingleProductScreen(product: product),
+                            ),
+                          );
+                        },
+                        child:ProductItem(
+                          product.id,
+                          product.title,
+                          product.salesPrice.toStringAsFixed(2),
+                          product.images?.first ?? '', // assuming there's always an image
+                          product.stock,
+                          categorySnapshot.data,
+                        ),
+                        // GridTile(
+                        //   header: GridTileBar(
+                        //     title: Text(product.title),
+                        //     subtitle: Column(
+                        //       crossAxisAlignment: CrossAxisAlignment.start,
+                        //       children: [
+                        //         Text.rich(
+                        //           TextSpan(
+                        //             children: [
+                        //               TextSpan(
+                        //                 text: 'Price: ₹ ${product.price.toStringAsFixed(2)} ',
+                        //                 style: const TextStyle(
+                        //                   decoration: TextDecoration.lineThrough,
+                        //                   color: Colors.red,
+                        //                 ),
+                        //               ),
+                        //               TextSpan(
+                        //                 text: ' ₹ ${product.salesPrice.toStringAsFixed(2)}',
+                        //                 style: const TextStyle(
+                        //                   fontSize: 18,
+                        //                   fontWeight: FontWeight.bold,
+                        //                   color: Colors.green,
+                        //                 ),
+                        //               ),
+                        //               if (discountPercentage > 0)
+                        //                 TextSpan(
+                        //                   text: ' (${discountPercentage.toStringAsFixed(1)}% OFF)',
+                        //                   style: const TextStyle(
+                        //                     fontSize: 14,
+                        //                     fontWeight: FontWeight.bold,
+                        //                     color: Colors.orange,
+                        //                   ),
+                        //                 ),
+                        //             ],
+                        //           ),
+                        //         ),
+                        //         Text('Stock: ${product.stock}'),
+                        //         Text('Category: ${categorySnapshot.data ?? 'N/A'}'),
+                        //       ],
+                        //     ),
+                        //   ),
+                        //   child: product.images != null && product.images!.isNotEmpty
+                        //       ? Image.network(product.images!.first, fit: BoxFit.cover)
+                        //       : Icon(Icons.image, size: 50),
+                        // ),
+                      );
+                    }
+                  },
                 );
               },
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 2 / 3,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
             );
           }
         },

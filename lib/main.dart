@@ -6,7 +6,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:kangleimart/firebase_options.dart';
-import 'package:kangleimart/screens/SingleProductScreen.dart';
 import 'package:kangleimart/utils/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -64,7 +63,7 @@ class MyApp extends StatelessWidget {
                   '/SignUpScreen': (ctx) => SignUpScreen(),
                   '/LoginScreen': (ctx) => LoginScreen(),
                   '/HomeScreen': (ctx) => HomeScreen(),
-                  '/ProductScreen': (ctx) => ProductScreen(),
+                  //'/ProductScreen': (ctx) => ProductScreen(),
                   '/CartPage': (ctx) => CartPage(),
                   '/OrdersScreen': (ctx) => OrdersScreen(),
                   '/ProfileScreen': (ctx) => ProfileScreen(),
@@ -110,7 +109,7 @@ class _AuthCheckerState extends State<AuthChecker> {
       );
     } else if (isLoggedIn!) {
       // User is logged in
-      return ProductScreen();
+      return HomeScreen();
     } else {
       // User is not logged in
       return LoginScreen();

@@ -3,11 +3,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../models/product_model.dart';
 
-class SingleProductScreen extends StatelessWidget {
+class SingleProductScreen extends StatefulWidget {
   final ProductModel product;
 
   SingleProductScreen({required this.product});
 
+  @override
+  State<SingleProductScreen> createState() => _SingleProductScreenState();
+}
+
+class _SingleProductScreenState extends State<SingleProductScreen> {
   Future<String> getCategoryName(String categoryId) async {
     final categoryDoc = await FirebaseFirestore.instance.collection('categories').doc(categoryId).get();
     return categoryDoc.data()?['Name'] ?? 'N/A';
@@ -17,6 +22,7 @@ class SingleProductScreen extends StatelessWidget {
     final brandDoc = await FirebaseFirestore.instance.collection('brands').doc(brandId).get();
     return brandDoc.data()?['Name'] ?? 'N/A';
   }
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +39,12 @@ class SingleProductScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Expanded(
-                    flex: 3,
                     child: Padding(
                       padding: EdgeInsets.all(16),
                       child: Center(
                         child: CachedNetworkImage(
-                          imageUrl: product.images!.first,
+                          imageUrl:  widget.product.images![_selectedIndex],
+                          //widget.product.images!.first,
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -47,13 +53,20 @@ class SingleProductScreen extends StatelessWidget {
                   Container(
                     height: 100, // Adjust the height as needed
                     child: ListView.separated(
-                      itemCount: product.images?.length ?? 0, // Ensure itemCount matches the number of images
+                      itemCount: widget.product.images?.length ?? 0, // Ensure itemCount matches the number of images
                       scrollDirection: Axis.horizontal,
                       separatorBuilder: (_, __) => const SizedBox(width: 5),
                       itemBuilder: (_, index) {
-                        return CachedNetworkImage(
-                          imageUrl: product.images![index],
-                          fit: BoxFit.cover,
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _selectedIndex = index;
+                            });
+                          },
+                          child: CachedNetworkImage(
+                            imageUrl: widget.product.images![index],
+                            fit: BoxFit.fill,
+                          ),
                         );
                       },
                     ),
@@ -67,27 +80,27 @@ class SingleProductScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    product.title,
+                    widget.product.title,
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 8),
                   Text(
-                    'Price: \$${product.price.toStringAsFixed(2)}',
+                    'Price: \$${widget.product.price.toStringAsFixed(2)}',
                     style: TextStyle(fontSize: 18),
                   ),
-                  if (product.salesPrice != null && product.salesPrice! < product.price)
+                  if (widget.product.salesPrice != null && widget.product.salesPrice! < widget.product.price)
                     Text(
-                      'Sale Price: \$${product.salesPrice.toStringAsFixed(2)}',
+                      'Sale Price: \$${widget.product.salesPrice.toStringAsFixed(2)}',
                       style: TextStyle(fontSize: 18, color: Colors.red),
                     ),
                   SizedBox(height: 8),
                   Text(
-                    'Stock: ${product.stock}',
+                    'Stock: ${widget.product.stock}',
                     style: TextStyle(fontSize: 18),
                   ),
                   SizedBox(height: 8),
                   FutureBuilder<String>(
-                    future: getBrandName(product.brandId ?? ''),
+                    future: getBrandName(widget.product.brandId ?? ''),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Text(
@@ -109,7 +122,7 @@ class SingleProductScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   FutureBuilder<String>(
-                    future: getCategoryName(product.categoryId ?? ''),
+                    future: getCategoryName(widget.product.categoryId ?? ''),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return Text(
@@ -137,9 +150,9 @@ class SingleProductScreen extends StatelessWidget {
                   SizedBox(height: 8),
                   ListView.builder(
                     shrinkWrap: true,
-                    itemCount: product.productVariations?.length ?? 0,
+                    itemCount: widget.product.productVariations?.length ?? 0,
                     itemBuilder: (context, index) {
-                      final variation = product.productVariations![index];
+                      final variation = widget.product.productVariations![index];
                       return ListTile(
                         title: Text('SKU: ${variation.sku}'),
                         subtitle: Text('Price: \$${variation.price.toStringAsFixed(2)}'),

@@ -26,7 +26,7 @@ class CustomDrawer extends StatelessWidget {
             leading: Icon(Icons.shop),
             title: CustomText(text: 'Shopping', fontSize: 14.sp,),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
+              //Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
             },
           ),
           Divider(),

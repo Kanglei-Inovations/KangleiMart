@@ -19,7 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _formKey.currentState!.save();
       Provider.of<AuthProviders>(context, listen: false).login(_email, _password);
       if (Provider.of<AuthProviders>(context, listen: false).isLoggedIn) {
-        Navigator.of(context).pushNamed('/ProductScreen');
+        Navigator.of(context).pushNamed('/HomeScreen');
       }
     }
   }
