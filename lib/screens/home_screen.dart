@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:kangleimart/models/product.dart';
 import 'package:kangleimart/widgets/custom_drawer.dart';
 import 'package:provider/provider.dart';
@@ -45,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
             final products = snapshot.data!;
             return GridView.builder(
               padding: EdgeInsets.all(4.sp),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2, // Number of columns in the grid
                 crossAxisSpacing: 8.0,
                 mainAxisSpacing: 8.0,
@@ -92,51 +93,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           product.stock,
                           categorySnapshot.data,
                         ),
-                        // GridTile(
-                        //   header: GridTileBar(
-                        //     title: Text(product.title),
-                        //     subtitle: Column(
-                        //       crossAxisAlignment: CrossAxisAlignment.start,
-                        //       children: [
-                        //         Text.rich(
-                        //           TextSpan(
-                        //             children: [
-                        //               TextSpan(
-                        //                 text: 'Price: ₹ ${product.price.toStringAsFixed(2)} ',
-                        //                 style: const TextStyle(
-                        //                   decoration: TextDecoration.lineThrough,
-                        //                   color: Colors.red,
-                        //                 ),
-                        //               ),
-                        //               TextSpan(
-                        //                 text: ' ₹ ${product.salesPrice.toStringAsFixed(2)}',
-                        //                 style: const TextStyle(
-                        //                   fontSize: 18,
-                        //                   fontWeight: FontWeight.bold,
-                        //                   color: Colors.green,
-                        //                 ),
-                        //               ),
-                        //               if (discountPercentage > 0)
-                        //                 TextSpan(
-                        //                   text: ' (${discountPercentage.toStringAsFixed(1)}% OFF)',
-                        //                   style: const TextStyle(
-                        //                     fontSize: 14,
-                        //                     fontWeight: FontWeight.bold,
-                        //                     color: Colors.orange,
-                        //                   ),
-                        //                 ),
-                        //             ],
-                        //           ),
-                        //         ),
-                        //         Text('Stock: ${product.stock}'),
-                        //         Text('Category: ${categorySnapshot.data ?? 'N/A'}'),
-                        //       ],
-                        //     ),
-                        //   ),
-                        //   child: product.images != null && product.images!.isNotEmpty
-                        //       ? Image.network(product.images!.first, fit: BoxFit.cover)
-                        //       : Icon(Icons.image, size: 50),
-                        // ),
                       );
                     }
                   },

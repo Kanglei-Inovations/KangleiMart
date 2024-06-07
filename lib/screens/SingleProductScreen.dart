@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../models/product_model.dart';
+import '../widgets/photo_view_gallery_screen.dart';
 
 class SingleProductScreen extends StatefulWidget {
   final ProductModel product;
@@ -42,10 +43,13 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
                     child: Padding(
                       padding: EdgeInsets.all(16),
                       child: Center(
-                        child: CachedNetworkImage(
-                          imageUrl:  widget.product.images![_selectedIndex],
-                          //widget.product.images!.first,
-                          fit: BoxFit.fill,
+                        child: GestureDetector(
+                          onTap: () => _openPhotoViewer(context, _selectedIndex),
+                          child: CachedNetworkImage(
+                            imageUrl:  widget.product.images![_selectedIndex],
+                            //widget.product.images!.first,
+                            fit: BoxFit.fill,
+                          ),
                         ),
                       ),
                     ),
@@ -163,6 +167,17 @@ class _SingleProductScreenState extends State<SingleProductScreen> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+  void _openPhotoViewer(BuildContext context, int initialIndex) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PhotoViewGalleryScreen(
+          images: widget.product.images!,
+          initialIndex: initialIndex,
         ),
       ),
     );
