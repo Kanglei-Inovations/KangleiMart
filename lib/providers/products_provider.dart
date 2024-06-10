@@ -9,6 +9,7 @@ class ProductProvider with ChangeNotifier {
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final List<ProductModel> _products = [];
   Map<String, String> _categoryNames = {};
+  Map<String, String> _brandNames = {};
   // Cache category names
   List<ProductModel> get products {
     return [..._products];
@@ -33,6 +34,35 @@ class ProductProvider with ChangeNotifier {
         CategoryModel category = CategoryModel.fromSnapshot(snapshot);
         _categoryNames[categoryId] = category.name;
         return category.name;
+      } else {
+        return 'Unknown';
+      }
+    }
+  }
+  Future<String> getBrandImage(String brandId) async {
+    if (_brandNames.containsKey(brandId)) {
+      return _brandNames[brandId]!;
+    } else {
+      DocumentSnapshot<Map<String, dynamic>> snapshot =
+      await _db.collection('brands').doc(brandId).get();
+      if (snapshot.exists) {
+        _brandNames[brandId] = snapshot.data()?['Image'] ?? 'Unknown';
+        return _brandNames[brandId]!;
+      } else {
+        return 'Unknown';
+      }
+    }
+  }
+
+  Future<String> getBrandName(String brandId) async {
+    if (_brandNames.containsKey(brandId)) {
+      return _brandNames[brandId]!;
+    } else {
+      DocumentSnapshot<Map<String, dynamic>> snapshot =
+      await _db.collection('brands').doc(brandId).get();
+      if (snapshot.exists) {
+        _brandNames[brandId] = snapshot.data()?['Name'] ?? 'Unknown';
+        return _brandNames[brandId]!;
       } else {
         return 'Unknown';
       }

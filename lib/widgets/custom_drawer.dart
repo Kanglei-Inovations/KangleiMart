@@ -24,7 +24,7 @@ class CustomDrawer extends StatelessWidget {
           Divider(),
           ListTile(
             leading: Icon(Icons.shop),
-            title: CustomText(text: 'Shopping', fontSize: 14.sp,),
+            title: MyAppText(text: 'Shopping', fontSize: 14.sp,),
             onTap: () {
               //Navigator.of(context).pushReplacementNamed(HomeScreen.routeName);
             },
@@ -32,7 +32,7 @@ class CustomDrawer extends StatelessWidget {
           Divider(),
           ListTile(
             leading: Icon(Icons.payment),
-            title: CustomText(text: 'Orders', fontSize: 14.sp,),
+            title: MyAppText(text: 'Orders', fontSize: 14.sp,),
             onTap: () {
               Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName);
             },
@@ -40,7 +40,7 @@ class CustomDrawer extends StatelessWidget {
           Divider(),
           ListTile(
             leading: Icon(Icons.shopping_cart),
-            title: CustomText(text: 'Cart', fontSize: 14.sp,),
+            title: MyAppText(text: 'Cart', fontSize: 14.sp,),
             onTap: () {
               Navigator.of(context).pushReplacementNamed(CartPage.routeName);
             },
@@ -48,7 +48,7 @@ class CustomDrawer extends StatelessWidget {
           Divider(),
           ListTile(
             leading: Icon(Icons.account_circle),
-            title: CustomText(text: 'Profile', fontSize: 14.sp,),
+            title: MyAppText(text: 'Profile', fontSize: 14.sp,),
             onTap: () {
               Navigator.of(context).pushReplacementNamed(ProfileScreen.routeName);
             },
@@ -56,7 +56,7 @@ class CustomDrawer extends StatelessWidget {
           Divider(),
           ListTile(
             leading: Icon(Icons.account_circle),
-            title: CustomText(text: 'Settings', fontSize: 14.sp,),
+            title: MyAppText(text: 'Settings', fontSize: 14.sp,),
             onTap: () {
               Navigator.of(context).pushReplacementNamed(ProfileScreen.routeName);
             },
@@ -64,7 +64,7 @@ class CustomDrawer extends StatelessWidget {
           Divider(),
           ListTile(
             leading: Icon(Icons.logout),
-            title: CustomText(text: 'Logout', fontSize: 14.sp,),
+            title: MyAppText(text: 'Logout', fontSize: 14.sp,),
             onTap: () {
               Provider.of<AuthProviders>(context, listen: false).logout;
               Navigator.of(context).pushNamed('/LoginScreen');

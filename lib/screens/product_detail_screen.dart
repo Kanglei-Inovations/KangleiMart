@@ -1,241 +1,432 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+import 'package:readmore/readmore.dart';
+import '../utils/app_string_constant.dart';
+import '../utils/text_const.dart';
+import '../Controllers/variation_controller.dart';
+import '../controllers/image_controller_product_screen.dart';
+import '../controllers/product_controller.dart';
 import '../models/product_model.dart';
-import '../widgets/photo_view_gallery_screen.dart';
+import '../providers/products_provider.dart';
+import '../utils/enums.dart';
+import '../widgets/choice_clip.dart';
+import '../widgets/product_detail_image_slider.dart';
 
-class ProductDetailScreen extends StatefulWidget {
+class ProductDetailScreen extends StatelessWidget {
   final ProductModel product;
 
-  ProductDetailScreen({required this.product});
-
-  @override
-  State<ProductDetailScreen> createState() => _ProductDetailScreenState();
-}
-
-class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  Future<String> getCategoryName(String categoryId) async {
-    final categoryDoc = await FirebaseFirestore.instance
-        .collection('categories')
-        .doc(categoryId)
-        .get();
-    return categoryDoc.data()?['Name'] ?? 'N/A';
-  }
-
-  Future<String> getBrandName(String brandId) async {
-    final brandDoc = await FirebaseFirestore.instance
-        .collection('brands')
-        .doc(brandId)
-        .get();
-    return brandDoc.data()?['Name'] ?? 'N/A';
-  }
-
-  int _selectedIndex = 0;
+  const ProductDetailScreen({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
+    final productProvider =
+        Provider.of<ProductProvider>(context, listen: false);
+    final controller = Get.put(VariationController());
+    final productController = Get.put(ProductController());
+    final imageController = Get.put(ImageControllerProductScreen());
+
+    final salePercentage = productController.calculateSalePercentage(
+        product.price, product.salesPrice);
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text('Product Details'),
-        titleTextStyle: TextStyle(
-          color: Colors.black,
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
+        title: const MyAppText(text: AppStrings.productScreenTitle),
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(8.sp),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              widget.product.title,
-              style: TextStyle(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w500,
+      body: WillPopScope(
+        onWillPop: () async {
+          /// Reset the state of the page......................................................
+          controller.resetSelectedAttributes();
+          return true; // Allow the page to be popped
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ProductDetailImageSlider(
+                product: product,
+                selectedProductImage: imageController.selectedProductImage,
               ),
-            ),
-            SizedBox(
-              height: 8.sp,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Stock: ${widget.product.stock}',
-                  style: TextStyle(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green),
-                ),
-                FutureBuilder<String>(
-                  future: getBrandName(widget.product.brandId ?? ''),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Text(
-                        'Brand: Loading...',
-                        style: TextStyle(fontSize: 14.sp),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text(
-                        'Brand: Error loading brand',
-                        style: TextStyle(fontSize: 14.sp, color: Colors.red),
-                      );
-                    } else {
-                      return Text(
-                        'Brand: ${snapshot.data}',
-                        style: TextStyle(fontSize: 14.sp, color: Colors.black),
-                      );
-                    }
-                  },
-                ),
-              ],
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 10),
-              height: 300.sp, // Adjust the height as needed
-              child: Row(
-                children: [
-                  Container(
-                    width: 60.sp, // Adjust the height as needed
-                    child: ListView.separated(
-                      itemCount: widget.product.images?.length ??
-                          0, // Ensure itemCount matches the number of images
-                      scrollDirection: Axis.vertical,
-                      separatorBuilder: (_, __) => const SizedBox(width: 5),
-                      itemBuilder: (_, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedIndex = index;
-                            });
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(vertical: 5),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 10),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color: Colors.grey.withOpacity(0.4),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ///Price.....................................................................
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.greenAccent,
                               ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 0.2,
-                                  blurRadius: 5,
-                                  offset: Offset(
-                                      0, 3), // changes position of shadow
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
+                              child: MyAppText(
+                                text: '$salePercentage% OFF',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            if (product.productType ==
+                                    ProductType.single.toString() &&
+                                product.salesPrice > 0)
+                              MyAppText(
+                                text: '${AppStrings.rupee}${product.price}',
+
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                textDecoration: TextDecoration.lineThrough,
+                                color: Colors.grey,
+                              ),
+                            Obx(
+                              () {
+                                if (controller
+                                    .selectedVariation.value.id.isNotEmpty) {
+                                  // Show the variation price if a variation is selected
+                                  return Row(
+                                    children: [
+                                      if (controller
+                                              .selectedVariation.value.price >
+                                          0)
+                                        MyAppText(
+                                          text: AppStrings.rupee +
+                                              controller.getVariationPrice(),
+                                          fontSize: 14,
+                                          textDecoration:
+                                              TextDecoration.lineThrough,
+                                        ),
+                                      SizedBox(width: 10.sp,),
+                                      MyAppText(
+                                        text: AppStrings.rupee +
+                                            controller.getVariationSalesPrice(),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ],
+                                  );
+                                } else {
+                                  product.productType ==
+                                          ProductType.single.toString() &&
+                                      product.salesPrice > 0;
+                                }
+                                {
+                                  // Show the product's single price before any variation is selected
+                                  return Column(
+                                    children: [
+                                      MyAppText(
+                                        text:
+                                            productController
+                                                .getProductPrice(product),
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ],
+                                  );
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    //Product Title............
+                    MyAppText(
+                      text: product.title,
+                      fontSize: 18,
+                    ),
+                    SizedBox(height: 8),
+                    //Stock.......................
+                    Row(
+                      children: [
+                        const MyAppText(
+                          text: AppStrings.productInStock,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        MyAppText(
+                          text: productController
+                              .getProductStockStatus(product.stock),
+                          fontSize: 16,
+                          color: productController.Status(product.stock),
+                        ),
+                      ],
+                    ),
+
+                    ///Brand ..............................................
+
+                    if (product.brandId!.isNotEmpty) SizedBox(height: 8),
+                    if (product.brandId!.isNotEmpty)
+                      FutureBuilder<String>(
+                        future: productProvider
+                            .getBrandImage(product.brandId ?? ''),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const MyAppText(
+                              text: AppStrings.productBrandLoading,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            );
+                          } else if (snapshot.hasError) {
+                            return const MyAppText(
+                              text: AppStrings.productErrorLoadingBrand,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            );
+                          } else {
+                            // Use CachedNetworkImage to load the brand image
+                            return Row(
+                              children: [
+                                const MyAppText(
+                                    text: AppStrings.productBrandText,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                CachedNetworkImage(
+                                  imageUrl: snapshot.data!,
+                                  width: 30,
+                                  fit: BoxFit.fill,
                                 ),
                               ],
-                            ),
-                            child: CachedNetworkImage(
-                              imageUrl: widget.product.images![index],
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        left: 16,
-                        right: 16,
+                            );
+                          }
+                        },
                       ),
-                      child: Center(
-                        child: GestureDetector(
-                          onTap: () =>
-                              _openPhotoViewer(context, _selectedIndex),
-                          child: CachedNetworkImage(
-                            imageUrl: widget.product.images![_selectedIndex],
-                            //widget.product.images!.first,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 8),
-                Text(
-                  'Price: \$${widget.product.price.toStringAsFixed(2)}',
-                  style:
-                      TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
-                ),
-                if (widget.product.salesPrice != null &&
-                    widget.product.salesPrice! < widget.product.price)
-                  Text(
-                    'Sale Price: \$${widget.product.salesPrice.toStringAsFixed(2)}',
-                    style: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green),
-                  ),
-                SizedBox(height: 8),
-                FutureBuilder<String>(
-                  future: getCategoryName(widget.product.categoryId ?? ''),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Text(
-                        'Category: Loading...',
-                        style: TextStyle(fontSize: 18),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text(
-                        'Category: Error loading category',
-                        style: TextStyle(fontSize: 18),
-                      );
-                    } else {
-                      return Text(
-                        'Category: ${snapshot.data}',
-                        style: TextStyle(fontSize: 18),
-                      );
-                    }
-                  },
-                ),
-                SizedBox(height: 16),
-                Text(
-                  'Variations:',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 8),
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: widget.product.productVariations?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    final variation = widget.product.productVariations![index];
-                    return ListTile(
-                      title: Text('SKU: ${variation.sku}'),
-                      subtitle: Text(
-                          'Price: \$${variation.price.toStringAsFixed(2)}'),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
-  void _openPhotoViewer(BuildContext context, int initialIndex) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PhotoViewGalleryScreen(
-          images: widget.product.images!,
-          initialIndex: initialIndex,
+                    ///Category ........................
+
+                    if (product.categoryId!.isNotEmpty) SizedBox(height: 8),
+                    if (product.categoryId!.isNotEmpty)
+                      FutureBuilder<String>(
+                        future: productProvider
+                            .getCategoryName(product.categoryId ?? ''),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const MyAppText(
+                                text: AppStrings.productCategoryLoading, fontSize: 18);
+                          } else if (snapshot.hasError) {
+                            return const MyAppText(
+                                text: AppStrings.productErrorLoadingCategory,
+                                fontSize: 18);
+                          } else {
+                            return Row(
+                              children: [
+                                const MyAppText(
+                                    text: AppStrings.productCategoryText,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                MyAppText(
+                                  text: '${snapshot.data}',
+                                  fontSize: 16,
+                                ),
+                              ],
+                            );
+                          }
+                        },
+                      ),
+                    SizedBox(height: 16),
+
+                    ///Variant................................................
+
+                    if (product.productType == ProductType.variable.toString())
+                      Obx(
+                        () => controller.selectedVariation.value.id.isNotEmpty
+                            ? Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: Colors.black12,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          const MyAppText(
+                                            text: AppStrings.productVariant,
+                                            fontSize: 28,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  MyAppText(
+                                                    text: AppStrings.productPrice,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  SizedBox(width: 5.sp,),
+
+                                                  if (controller
+                                                          .selectedVariation
+                                                          .value
+                                                          .price >
+                                                      0)
+                                                    MyAppText(
+                                                      text:
+                                                          '${AppStrings.rupee}${controller.getVariationPrice()}  ',
+                                                      fontSize: 14,
+                                                      textDecoration:
+                                                          TextDecoration
+                                                              .lineThrough,
+                                                      color: Colors.red,
+                                                    ),
+                                                  MyAppText(
+                                                    text:
+                                                        '${AppStrings.rupee} ${controller.getVariationSalesPrice()}',
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                  )
+                                                ],
+                                              ),
+                                              Row(
+                                                children: [
+                                                  const MyAppText(
+                                                    text: AppStrings.productInStock,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                  MyAppText(
+                                                    text: controller
+                                                        .variationStockStatus
+                                                        .value,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      const MyAppText(
+                                          text:
+                                              "This Product variable description. Change function get from firebase this is demo")
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : Container(),
+                      ),
+                    if (product.productType == ProductType.variable.toString())
+                      Column(
+                        children: [
+                          Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: product.productAttributes
+                                      ?.map(
+                                        (attribute) => Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            MyAppText(
+                                              text: '${attribute.name}',
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Obx(() => Wrap(
+                                                  spacing: 8,
+                                                  children: attribute.values!
+                                                      .map((attributeValue) {
+                                                    final isSelected = controller
+                                                                .selectedAttributes[
+                                                            attribute.name] ==
+                                                        attributeValue;
+                                                    final available = controller
+                                                        .getAttributesAvailabilityInVariation(
+                                                            product
+                                                                .productVariations!,
+                                                            attribute.name!)
+                                                        .contains(
+                                                            attributeValue);
+                                                    return KChoiceClip(
+                                                        text: attributeValue,
+                                                        selected: isSelected,
+                                                        onSelected: available
+                                                            ? (selected) {
+                                                                if (selected &&
+                                                                    available) {
+                                                                  controller.onAttributesSelected(
+                                                                      product,
+                                                                      attribute
+                                                                              .name ??
+                                                                          '',
+                                                                      attributeValue);
+                                                                }
+                                                              }
+                                                            : null);
+                                                  }).toList(),
+                                                ))
+                                          ],
+                                        ),
+                                      )
+                                      .toList() ??
+                                  [])
+                        ],
+                      ),
+
+                    ///Checkout Button
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        child: const MyAppText(text: "Add to Cart"),
+                      ),
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        child: const MyAppText(text: "Checkout"),
+                      ),
+                    ),
+                    const MyAppText(
+                      text: "Description",
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    ReadMoreText(
+                      product.description!,
+                      trimLines: 2,
+                      trimMode: TrimMode.Line,
+                      trimCollapsedText: 'Show More',
+                      trimExpandedText: 'Less',
+                      moreStyle: const TextStyle(
+                          fontSize: 14, fontWeight: FontWeight.w800),
+                      lessStyle: const TextStyle(
+                          fontSize: 14, fontWeight: FontWeight.w800),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
