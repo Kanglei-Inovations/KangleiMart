@@ -16,7 +16,6 @@ import 'package:kangleimart/providers/products_provider.dart';
 import 'package:kangleimart/screens/cart_page.dart';
 import 'package:kangleimart/screens/orders_screen.dart';
 import 'package:kangleimart/screens/profile_screen.dart';
-import 'package:kangleimart/screens/product_screen.dart';
 import 'package:kangleimart/screens/login_screen.dart';
 import 'package:kangleimart/screens/signup_screen.dart';
 import 'package:kangleimart/screens/home_screen.dart';

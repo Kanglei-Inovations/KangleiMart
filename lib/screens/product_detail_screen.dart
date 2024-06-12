@@ -100,12 +100,7 @@ class ProductDetailScreen extends StatelessWidget {
                                             decoration:
                                             TextDecoration.lineThrough),
                                       ),
-                                    Text(
-                                      'Rs. ${controller.getVariationSalesPrice()}',
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold),
-                                    ),
+
                                   ],
                                 );
                               } else
@@ -122,7 +117,6 @@ class ProductDetailScreen extends StatelessWidget {
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.black,
                                       ),
                                     ),
                                   ],

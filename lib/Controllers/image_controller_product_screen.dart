@@ -18,11 +18,12 @@ class ImageControllerProductScreen extends GetxController {
     Set<String> images = {};
     images.add(product.images!.first);
     selectedProductImage.value = product.images!.first;
-    if(product.images != null){
+    if (product.images != null) {
       images.addAll(product.images!);
     }
 
-    if (product.productVariations != null && product.productVariations!.isNotEmpty) {
+    if (product.productVariations != null &&
+        product.productVariations!.isNotEmpty) {
       images.addAll(product.productVariations!
           .map((variation) => variation.image)
           .where((image) => image != null && image.isNotEmpty));
@@ -33,22 +34,26 @@ class ImageControllerProductScreen extends GetxController {
   void showEnlargedImage(String image) {
     Get.to(
       fullscreenDialog: true,
-          () => Scaffold(
+      () => Scaffold(
         body: Stack(
           children: [
             Center(
               child: PhotoView(
-                imageProvider: NetworkImage(image),
-                backgroundDecoration: BoxDecoration(
-                  color: Colors.white,
-                ),
+                loadingBuilder: (){
+                  
+                },
+                imageProvider: NetworkImageWidget(image: image,),
+                backgroundDecoration: BoxDecoration(),
               ),
             ),
             Positioned(
               top: 60,
               right: 20,
               child: IconButton(
-                icon: Icon(Icons.close, color: Colors.black, size: 30),
+                icon: Icon(
+                  Icons.close,
+                  size: 30,
+                ),
                 onPressed: () => Get.back(),
               ),
             ),
