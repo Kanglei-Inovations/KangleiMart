@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -39,10 +40,10 @@ class ImageControllerProductScreen extends GetxController {
           children: [
             Center(
               child: PhotoView(
-                loadingBuilder: (){
-                  
+                loadingBuilder: (context, event) {
+                  return FancyShimmerImage(imageUrl: image);
                 },
-                imageProvider: NetworkImageWidget(image: image,),
+                imageProvider: NetworkImage(image,),
                 backgroundDecoration: BoxDecoration(),
               ),
             ),
