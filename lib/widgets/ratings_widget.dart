@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kangleimartadmin/widgets/rating_bar.dart';
-import 'package:kangleimartadmin/widgets/rating_progress_indicator.dart';
-import 'package:kangleimartadmin/widgets/review_card.dart';
+import 'package:kangleimart/widgets/rating_bar.dart';
+import 'package:kangleimart/widgets/rating_progress_indicator.dart';
+import 'package:kangleimart/widgets/review_card.dart';
+
 
 class RatingsWidget extends StatelessWidget {
   const RatingsWidget({
